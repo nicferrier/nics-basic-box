@@ -1,0 +1,25 @@
+body {
+    font-family: sans-serif;
+}
+
+section.code {
+    font-family: monospace;
+    width: 50%;
+}
+
+section.code table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+section.code table tr {
+    border-bottom: 1px solid #aeaeae;
+}
+
+td.label {
+    width: 30px;
+}
+
+td.code {
+    height: 30px;
+}
