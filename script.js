@@ -217,7 +217,7 @@ window.addEventListener("load", loadEvt => {
                     }
 
                     const identifierToken = token.next;
-                    if (identifierToken.next.type !== "keyword"
+                    if (identifierToken.next.type !== "operator"
                         && identifierToken.next.str !== "=") {
                         throw new ParseError("expected asignment", identifierToken);
                     }
@@ -277,11 +277,23 @@ window.addEventListener("load", loadEvt => {
                     };
                 }
                 }
+                break;
+            case "identifier":
+                if (token.next.str !== "=") {
+                    throw new ParseError("expected assignment", token.next);
+                }
+                const identifierName = token.str;
+                const expression = expressionCompiler(token.next);
+                return {
+                    token: expression.token,
+                    code: function (machine) {
+                        const value = expression.code(machine);
+                        machine.memory[identifierName] = value;
+                    }
+                };
+                
             }
         };
-
-        // console.log("program tokens", programTokens);
-        
         return parse(tokenList[0]);
     };
 
@@ -309,7 +321,9 @@ window.addEventListener("load", loadEvt => {
         "B": "PRINT x",
         "C": "LET $x = \"Hello World\"",
         "D": "PRINT $x",
-        "E": "EOF"
+        "E": "x = x + 1",
+        "F": "PRINT x",
+        "G": "EOF"
     };
 
     const lines2 = {
